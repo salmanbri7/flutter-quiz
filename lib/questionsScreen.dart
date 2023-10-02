@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz/data/questions.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({
@@ -12,19 +13,32 @@ class QuestionsScreen extends StatefulWidget {
 class _QuestionsScreenState extends State<QuestionsScreen> {
   @override
   Widget build(BuildContext context) {
+    final currentQuestion = questions[0];
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text("some question"),
-          SizedBox(
-            height: 20,
-          ),
-          AnswerButton("answer 1", () {}),
-          AnswerButton("answer 2", () {}),
-          AnswerButton("answer 3", () {}),
-          AnswerButton("answer 4", () {}),
-        ],
+      child: Container(
+        margin: EdgeInsets.all(40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              currentQuestion.text,
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+
+            SizedBox(
+              height: 20,
+            ),
+            ...currentQuestion.answers.map(
+              (e) => AnswerButton(e, () {}),
+            ),
+            // AnswerButton("answer 1", () {}),
+            // AnswerButton("answer 2", () {}),
+            // AnswerButton("answer 3", () {}),
+            // AnswerButton("answer 4", () {}),
+          ],
+        ),
       ),
     );
   }
