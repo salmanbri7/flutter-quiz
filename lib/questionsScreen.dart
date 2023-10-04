@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/data/questions.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({
@@ -11,9 +12,11 @@ class QuestionsScreen extends StatefulWidget {
 }
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
+  var currentQuestionIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    final currentQuestion = questions[0];
+    final currentQuestion = questions[currentQuestionIndex];
     return Center(
       child: Container(
         margin: EdgeInsets.all(40),
@@ -23,7 +26,11 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           children: [
             Text(
               currentQuestion.text,
-              style: TextStyle(color: Colors.white),
+              style: GoogleFonts.lato(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.center,
             ),
 
@@ -31,7 +38,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               height: 20,
             ),
             ...currentQuestion.getShuffledAnswers().map(
-                  (e) => AnswerButton(e, () {}),
+                  (e) => AnswerButton(e, () {
+                    goNextQuestion();
+                  }),
                 ),
             // AnswerButton("answer 1", () {}),
             // AnswerButton("answer 2", () {}),
@@ -41,6 +50,12 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
         ),
       ),
     );
+  }
+
+  void goNextQuestion() {
+    setState(() {
+      currentQuestionIndex++;
+    });
   }
 }
 
@@ -54,28 +69,24 @@ class AnswerButton extends StatelessWidget {
   final void Function() onTap;
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+        // padding: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
         backgroundColor: Colors.purple,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
       ),
       onPressed: onTap,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            answer,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-            ),
-          ),
-          Icon(Icons.keyboard_arrow_right),
-        ],
+      label: Text(
+        answer,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
       ),
+      icon: Icon(Icons.keyboard_arrow_right),
     );
   }
 }
